@@ -38,7 +38,7 @@ var Location = function(data) {
 	this.clicked = ko.observable(data.clicked);
 }
 
-function initMap() {
+window.initMap = function(){
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.759, lng: -122.423},
 		zoom: 16

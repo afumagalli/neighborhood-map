@@ -5,10 +5,12 @@ html, body {
 }
 #location-list {
 	width: 25%;
+	height: 100%;
 	background-color: black;
+	padding-left: 10px;
 	color: white;
+	float: left;
 }
 #map {
 	height: 100%;
-	width: 75%;
 }
