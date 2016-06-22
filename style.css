@@ -7,7 +7,7 @@ html, body {
 	width: 25%;
 	height: 100%;
 	background-color: black;
-	padding-left: 10px;
+	padding: 10px;
 	color: white;
 	float: left;
 }

@@ -82,3 +82,5 @@ var ViewModel = function() {
         self.currentLocation(clickedLocation);
     }
 };
+
+ko.applyBindings(new ViewModel());

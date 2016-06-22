@@ -10,7 +10,9 @@
 <body>
 	<div id="location-list">
 		<h1>Locations</h1>
-		<ul></ul>
+		<ul data-bind="foreach: locationList">
+			<li class="location-item" data-bind="text: name, click: $parent.setCurrentLocation"></li>
+		</ul>
 	</div>
 	<div id="map"></div>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9qCqlHLPwRafDQuH3l9b2rEeaojO30mE&callback=initMap" async defer></script>
