@@ -6,13 +6,10 @@ html, body {
 form {
 	margin: 10px;
 }
-input[type=text] {
+input[type=search] {
 	border-radius: 25px;
 	color: black;
-}
-input[type=submit] {
-	border-radius: 25px;
-	color: black;
+	text-indent: 10px;
 }
 #location-list {
 	width: 25%;

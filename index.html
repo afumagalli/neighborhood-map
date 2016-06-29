@@ -11,8 +11,7 @@
 	<div id="location-list">
 		<h1>Locations</h1>
 		<form>
-			<input type="text" name="filter">
-			<input type="submit" name="Submit">
+			<input placeholder="Filter" type="search" name="filter" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
 		</form>
 		<ul data-bind="foreach: locationList">
 			<li class="location-item" data-bind="text: name, click: $parent.setCurrentLocation"></li>
