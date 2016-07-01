@@ -2,32 +2,27 @@ var initialLocations = [
 	{
 		name: 'Dolores Park',
 		lat: 37.7597727,
-		lng: -122.427063,
-		clicked: false
+		lng: -122.427063
 	},
 	{
 		name: 'Tartine Bakery',
 		lat: 37.7614184,
-		lng: -122.4241038,
-		clicked: false
+		lng: -122.4241038
 	},
 	{
 		name: 'Alamo Drafthouse Cinema',
 		lat: 37.7562163,
-		lng: -122.4191911,
-		clicked: false
+		lng: -122.4191911
 	},
 	{
 		name: 'Gracias Madre',
 		lat: 37.7615715,
-		lng: -122.4190799,
-		clicked: false
+		lng: -122.4190799
 	},
 	{
 		name: 'The Chapel',
 		lat: 37.760565,
-		lng: -122.421188,
-		clicked: false
+		lng: -122.421188
 	}
 ];
 var contentString = "This is a test of the InfoWindow";
@@ -39,7 +34,6 @@ var Location = function(data) {
 	this.name = ko.observable(data.name);
 	this.lat = ko.observable(data.lat);
 	this.lng = ko.observable(data.lng);
-	this.clicked = ko.observable(data.clicked);
 }
 
 window.initMap = function(){
@@ -68,9 +62,12 @@ function addMarkerWithTimeout(position, timeout, i) {
 		infoWindows.push(new google.maps.InfoWindow({
 			content: contentString
 		}));
-		console.log(markers[i]);
 		markers[i].addListener('click', function() {
+			markers[i].setAnimation(google.maps.Animation.BOUNCE);
 			infoWindows[i].open(map, markers[i]);
+			setTimeout(function() {
+				markers[i].setAnimation(null);
+			}, 750);
 		});
 	}, timeout);
 }
@@ -92,12 +89,14 @@ var ViewModel = function() {
         self.locationList.push(new Location(locationItem));
     });
     dropMarkers(this.locationList());
+    this.bounceMarker = function() {
+
+    };
     this.currentLocation = ko.observable(this.locationList()[0]);
     this.setCurrentLocation = function(clickedLocation) {
         self.currentLocation(clickedLocation);
     };
     this.search = function(value) {
-		// remove all the current beers, which removes them from the view
 		self.locationList.removeAll();
 		for(var x in initialLocations) {
 			if(initialLocations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
