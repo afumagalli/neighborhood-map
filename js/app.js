@@ -1,3 +1,12 @@
+var map;
+window.initMap = function(){
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat: 37.759, lng: -122.423},
+		zoom: 16
+	});
+	ko.applyBindings(new ViewModel());
+};
+
 var initialLocations = [
 	{
 		name: 'Dolores Park',
@@ -28,18 +37,15 @@ var initialLocations = [
 var contentString = "This is a test of the InfoWindow";
 var markers = [];
 var infoWindows = [];
-var map;
 
 var Location = function(data) {
 	this.name = ko.observable(data.name);
 	this.lat = ko.observable(data.lat);
 	this.lng = ko.observable(data.lng);
-}
-
-window.initMap = function(){
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 37.759, lng: -122.423},
-		zoom: 16
+	this.marker = new google.maps.Marker({
+		title: this.name(),
+		position: {lat: this.lat(), lng: this.lng()},
+		map: map
 	});
 }
 
@@ -82,31 +88,44 @@ function clearMarkers() {
 }
 
 var ViewModel = function() {
-    var self = this;
-    this.query = ko.observable('')
-    this.locationList = ko.observableArray([]);
-    initialLocations.forEach(function(locationItem) {
-        self.locationList.push(new Location(locationItem));
-    });
-    dropMarkers(this.locationList());
-    this.bounceMarker = function() {
+	var self = this;
+	this.query = ko.observable('')
+	this.locationList = ko.observableArray([]);
+	sessionStorage.clear();
+	if (typeof google !== 'object' || typeof google.maps !== 'object') {
+		console.log("error loading Google Maps API");
+		return;
+	};
+	initialLocations.forEach(function(locationItem) {
+		self.locationList.push(new Location(locationItem));
+	});
+	//dropMarkers(this.locationList());
+	this.bounceMarker = function() {
 
-    };
-    this.currentLocation = ko.observable(this.locationList()[0]);
-    this.setCurrentLocation = function(clickedLocation) {
-        self.currentLocation(clickedLocation);
-    };
-    this.search = function(value) {
+	};
+	this.currentLocation = ko.observable(this.locationList()[0]);
+	this.setCurrentLocation = function(clickedLocation) {
+		self.currentLocation(clickedLocation);
+	};
+	this.search = function(value) {
+		console.log(self.locationList());
+		for(var x in self.locationList()) {
+			google.maps.event.clearInstanceListeners(self.locationList()[x].marker)
+			self.locationList()[x].marker.setMap(null);
+		}
 		self.locationList.removeAll();
+		console.log(self.locationList());
 		for(var x in initialLocations) {
 			if(initialLocations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 				self.locationList.push(new Location(initialLocations[x]));
+				console.log(self.locationList());
 			}
 		}
-		dropMarkers(self.locationList());
 	};
 	this.query.subscribe(this.search);
 };
 
-ko.applyBindings(new ViewModel());
+// $(function() {
+// 	ko.applyBindings(new ViewModel());
+// });
 //ViewModel.query.subscribe(ViewModel.search);
