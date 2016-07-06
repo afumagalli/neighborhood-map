@@ -1,4 +1,5 @@
 var map;
+var contentString = "This is a test of the InfoWindow";
 window.initMap = function(){
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.759, lng: -122.423},
@@ -34,11 +35,9 @@ var initialLocations = [
 		lng: -122.421188
 	}
 ];
-var contentString = "This is a test of the InfoWindow";
-var markers = [];
-var infoWindows = [];
 
 var Location = function(data) {
+	var self = this;
 	this.name = ko.observable(data.name);
 	this.lat = ko.observable(data.lat);
 	this.lng = ko.observable(data.lng);
@@ -47,44 +46,16 @@ var Location = function(data) {
 		position: {lat: this.lat(), lng: this.lng()},
 		map: map
 	});
-}
-
-function dropMarkers(locations) {
-	clearMarkers();
-	console.log(locations);
-	for (var i = 0; i < locations.length; i++) {
-		addMarkerWithTimeout(locations[i], 50, i);
-	};
-}
-
-function addMarkerWithTimeout(position, timeout, i) {
-	window.setTimeout(function() {
-		markers.push(new google.maps.Marker({
-			title: position.name(),
-			position: {lat: position.lat(), lng: position.lng()},
-			map: map,
-			//animation: google.maps.Animation.DROP
-		}));
-		infoWindows.push(new google.maps.InfoWindow({
-			content: contentString
-		}));
-		markers[i].addListener('click', function() {
-			markers[i].setAnimation(google.maps.Animation.BOUNCE);
-			infoWindows[i].open(map, markers[i]);
-			setTimeout(function() {
-				markers[i].setAnimation(null);
-			}, 750);
-		});
-	}, timeout);
-}
-
-function clearMarkers() {
-	for (var i = 0; i < markers.length; i++) {
-		google.maps.event.clearInstanceListeners(markers[i])
-		markers[i].setMap(null);
-	};
-	markers = [];
-	infoWindows = [];
+	this.infoWindow = new google.maps.InfoWindow({
+		content: contentString
+	});
+	this.marker.addListener('click', function() {
+		self.marker.setAnimation(google.maps.Animation.BOUNCE);
+		self.infoWindow.open(map, self.marker);
+		setTimeout(function() {
+			self.marker.setAnimation(null);
+		}, 750);
+	});
 }
 
 var ViewModel = function() {
@@ -99,7 +70,6 @@ var ViewModel = function() {
 	initialLocations.forEach(function(locationItem) {
 		self.locationList.push(new Location(locationItem));
 	});
-	//dropMarkers(this.locationList());
 	this.bounceMarker = function() {
 
 	};
@@ -108,24 +78,16 @@ var ViewModel = function() {
 		self.currentLocation(clickedLocation);
 	};
 	this.search = function(value) {
-		console.log(self.locationList());
 		for(var x in self.locationList()) {
 			google.maps.event.clearInstanceListeners(self.locationList()[x].marker)
 			self.locationList()[x].marker.setMap(null);
 		}
 		self.locationList.removeAll();
-		console.log(self.locationList());
 		for(var x in initialLocations) {
 			if(initialLocations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 				self.locationList.push(new Location(initialLocations[x]));
-				console.log(self.locationList());
 			}
 		}
 	};
 	this.query.subscribe(this.search);
 };
-
-// $(function() {
-// 	ko.applyBindings(new ViewModel());
-// });
-//ViewModel.query.subscribe(ViewModel.search);
