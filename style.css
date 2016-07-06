@@ -3,14 +3,17 @@ html, body {
 	margin: 0;
 	padding: 0;
 }
+
 form {
 	margin: 10px;
 }
+
 input[type=search] {
 	border-radius: 25px;
 	color: black;
 	text-indent: 10px;
 }
+
 #location-list {
 	width: 25%;
 	height: 100%;
@@ -19,6 +22,43 @@ input[type=search] {
 	color: white;
 	float: left;
 }
+
 #map {
 	height: 100%;
+}
+
+#hamburger-menu {
+  display: none;
+}
+
+@media screen and (max-width: 549px) {
+	#hamburger-menu {
+		height: 48px;
+		margin-right: 0.5em;
+		z-index: 1;
+		display: inline-block;
+		position: absolute;
+		right: 0;
+		padding: 0.5em;
+		background: #000;
+	}
+	#hamburger-menu svg {
+		width: 32px;
+		fill: #fff;
+	}
+	.drawer {
+		z-index: 2;
+		width: 50%;
+		position: absolute;
+		-webkit-transform: translate(-300px, 0);
+		transform: translate(-300px, 0);
+		transition: transform 0.3s ease;
+	}
+	.drawer.open {
+		-webkit-transform: translate(0, 0);
+		transform: translate(0, 0);
+	}
+	#location-list {
+		width: 50%;
+	}
 }

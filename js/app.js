@@ -87,7 +87,6 @@ var ViewModel = function() {
 	};
 	this.query = ko.observable('')
 	this.locationList = ko.observableArray([]);
-	console.log(initialLocations);
 	initialLocations.forEach(function(locationItem) {
 		self.locationList.push(new Location(locationItem));
 	});
