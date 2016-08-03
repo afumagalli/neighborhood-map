@@ -1,7 +1,15 @@
+'use strict';
 var map;
 var infoWindow;
+
+// Display an error message if map fails to load
+var googleMapError = function() {
+	console.log('Failed to load Google Map. Please try again later.');
+	alert('Failed to load Google Map. Please try again later.');
+};
+
 // Initiazlie map and set up ViewModel
-initMap = function(){
+var initMap = function(){
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.759, lng: -122.423},
 		zoom: 16
@@ -18,14 +26,19 @@ var NYTimes = function(location) {
 	var nytURL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + location.name() + '&sort=newest&api-key=3ee99f8f736242c18f89225585db60a4';
 	$.getJSON(nytURL, function(data) {
 		var nytElem = ('<h3>New York Times Articles About ' + location.name() + '</h3><ul>');
-		articles = data.response.docs;
-		for (var i = 0; i < articles.length; i++) {
-			var article = articles[i];
-			nytElem += '<li class="article">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '<p>' + article.snippet + '</p>' + '</li>';;
-		};
+		var articles = data.response.docs;
+		if (!articles) {
+			nytElem += '<li class="error">Data not available</li>';
+		}
+		else {
+			for (var i = 0; i < articles.length; i++) {
+				var article = articles[i];
+				nytElem += '<li class="article">' + '<a href="' + article.web_url + '" target="_blank">' + article.headline.main + '</a>' + '<p>' + article.snippet + '</p>' + '</li>';
+			}
+		}
 		infoWindow.setContent(nytElem);
 	}).fail(function(e) {
-		nytElem = 'New York Times Articles Could Not Be Loaded';
+		var nytElem = 'New York Times Articles Could Not Be Loaded';
 		infoWindow.setContent(nytElem);
 	});
 };
@@ -64,11 +77,12 @@ var initialLocations = [
 var Location = function(data) {
 	var self = this;
 	this.name = ko.observable(data.name);
-	this.lat = ko.observable(data.lat);
-	this.lng = ko.observable(data.lng);
+	this.lat = data.lat;
+	this.lng = data.lng;
+	this.visible = ko.observable(true);
 	this.marker = new google.maps.Marker({
 		title: this.name(),
-		position: {lat: this.lat(), lng: this.lng()},
+		position: {lat: this.lat, lng: this.lng},
 		map: map
 	});
 	// Get info from NYTimes and display in InfoWindow
@@ -78,22 +92,22 @@ var Location = function(data) {
 		infoWindow.open(map, self.marker);
 		setTimeout(function() {
 			self.marker.setAnimation(null);
-		}, 750);
-	}
+		}, 700);
+	};
 	this.marker.addListener('click', function() {
 		self.showInfo();
 	});
-}
+};
 
 // ViewModel for the application
 var ViewModel = function() {
-	var self = this;
 	// error handling
 	if (typeof google !== 'object' || typeof google.maps !== 'object') {
 		console.log("error loading Google Maps API");
-		return;
-	};
-	this.query = ko.observable('')
+		googleMapError();
+	}
+	var self = this;
+	this.query = ko.observable('');
 	this.locationList = ko.observableArray([]);
 	initialLocations.forEach(function(locationItem) {
 		self.locationList.push(new Location(locationItem));
@@ -104,17 +118,22 @@ var ViewModel = function() {
 	};
 	this.search = function(value) {
 		// clear the map
-		for(var i in self.locationList()) {
-			google.maps.event.clearInstanceListeners(self.locationList()[i].marker)
-			self.locationList()[i].marker.setMap(null);
-		}
-		self.locationList.removeAll();
-		// recreate list of locations based on search terms
-		for(var i in initialLocations) {
-			if(initialLocations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-				self.locationList.push(new Location(initialLocations[i]));
+		self.locationList().forEach(function(location) {
+			if(location.name().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+				location.marker.setVisible(true);
+				location.visible(true);
 			}
-		}
+			else {
+				location.marker.setVisible(false);
+				location.visible(false);
+			}
+		});
+		// recreate list of locations based on search terms
+		// initialLocations.forEach(function(location) {
+		// 	if(initialLocations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+		// 		self.locationList.push(new Location(initialLocations[i]));
+		// 	}
+		// });
 	};
 	// subscribe to updates to search
 	this.query.subscribe(this.search);

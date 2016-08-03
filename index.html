@@ -2,9 +2,9 @@
 <html>
 <head>
 	<title>Neighborhood Map</title>
-	<meta name="viewport" content="initial-scale=1.0">
+	<meta name=viewport content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 <body>
@@ -19,25 +19,27 @@
 			<input placeholder="Filter" type="search" name="filter" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
 		</form>
 		<ul data-bind="foreach: locationList">
-			<li class="location-item" data-bind="text: name, click: $parent.showInfo"></li>
+			<li class="location-item" data-bind="if: visible">
+				<div class="location-item" data-bind="text: name, click: $parent.showInfo"></div>
+			</li>
 		</ul>
 	</div>
 	<div id="map"></div>
 	<script src="js/lib/jquery-3.0.0.min.js"></script>
 	<script src="js/lib/knockout-3.4.0.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9qCqlHLPwRafDQuH3l9b2rEeaojO30mE&callback=initMap" async defer></script>
 	<script src="js/app.js"></script>
+	<script async defer onerror="googleMapError()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9qCqlHLPwRafDQuH3l9b2rEeaojO30mE&callback=initMap"></script>
 	<script>
-			var menu = document.querySelector('#hamburger-menu');
-			var main = document.querySelector('#map');
-			var drawer = document.querySelector('.drawer');
-			menu.addEventListener('click', function(e) {
-				drawer.classList.toggle('open');
-				e.stopPropagation();
-			});
-			main.addEventListener('click', function() {
-				drawer.classList.remove('open');
-			});
-		</script>
+		var menu = document.querySelector('#hamburger-menu');
+		var main = document.querySelector('#map');
+		var drawer = document.querySelector('.drawer');
+		menu.addEventListener('click', function(e) {
+			drawer.classList.toggle('open');
+			e.stopPropagation();
+		});
+		main.addEventListener('click', function() {
+			drawer.classList.remove('open');
+		});
+	</script>
 </body>
 </html>
