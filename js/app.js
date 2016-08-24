@@ -22,26 +22,26 @@ var initMap = function(){
 };
 
 // Get information from NYTimes about each location
-var NYTimes = function(location) {
-	var nytURL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + location.name() + '&sort=newest&api-key=3ee99f8f736242c18f89225585db60a4';
-	$.getJSON(nytURL, function(data) {
-		var nytElem = ('<h3>New York Times Articles About ' + location.name() + '</h3><ul>');
-		var articles = data.response.docs;
-		if (!articles) {
-			nytElem += '<li class="error">Data not available</li>';
-		}
-		else {
-			for (var i = 0; i < articles.length; i++) {
-				var article = articles[i];
-				nytElem += '<li class="article">' + '<a href="' + article.web_url + '" target="_blank">' + article.headline.main + '</a>' + '<p>' + article.snippet + '</p>' + '</li>';
-			}
-		}
-		infoWindow.setContent(nytElem);
-	}).fail(function(e) {
-		var nytElem = 'New York Times Articles Could Not Be Loaded';
-		infoWindow.setContent(nytElem);
-	});
-};
+// var NYTimes = function(location) {
+// 	var nytURL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + location.name() + '&sort=newest&api-key=3ee99f8f736242c18f89225585db60a4';
+// 	$.getJSON(nytURL, function(data) {
+// 		var nytElem = ('<h3>New York Times Articles About ' + location.name() + '</h3><ul>');
+// 		var articles = data.response.docs;
+// 		if (!articles) {
+// 			nytElem += '<li class="error">Data not available</li>';
+// 		}
+// 		else {
+// 			for (var i = 0; i < articles.length; i++) {
+// 				var article = articles[i];
+// 				nytElem += '<li class="article">' + '<a href="' + article.web_url + '" target="_blank">' + article.headline.main + '</a>' + '<p>' + article.snippet + '</p>' + '</li>';
+// 			}
+// 		}
+// 		infoWindow.setContent(nytElem);
+// 	}).fail(function(e) {
+// 		var nytElem = 'New York Times Articles Could Not Be Loaded';
+// 		infoWindow.setContent(nytElem);
+// 	});
+// };
 
 // Locations on the map
 var initialLocations = [
@@ -103,6 +103,8 @@ var Location = function(data) {
 	this.name = ko.observable(data.name);
 	this.lat = data.lat;
 	this.lng = data.lng;
+	this.rating = data.rating;
+	this.review = data.review;
 	this.visible = ko.observable(true);
 	this.marker = new google.maps.Marker({
 		title: this.name(),
@@ -111,7 +113,12 @@ var Location = function(data) {
 	});
 	// Get info from NYTimes and display in InfoWindow
 	this.showInfo = function() {
-		NYTimes(self);
+		var content = '<div class="rating">';
+		for (var i = 0; i < this.rating; i++) {
+			content += '<img class="star" src="images/star.ico">'
+		};
+		content += '</div><div class="review">' + this.review + '</div>'
+		infoWindow.setContent(content);
 		self.marker.setAnimation(google.maps.Animation.BOUNCE);
 		infoWindow.open(map, self.marker);
 		setTimeout(function() {
@@ -141,7 +148,7 @@ var ViewModel = function() {
 		this.showInfo();
 	};
 	this.search = function(value) {
-		// clear the map
+		// only locations that match search criteria should be visible
 		self.locationList().forEach(function(location) {
 			if(location.name().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 				location.marker.setVisible(true);
@@ -152,12 +159,6 @@ var ViewModel = function() {
 				location.visible(false);
 			}
 		});
-		// recreate list of locations based on search terms
-		// initialLocations.forEach(function(location) {
-		// 	if(initialLocations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-		// 		self.locationList.push(new Location(initialLocations[i]));
-		// 	}
-		// });
 	};
 	// subscribe to updates to search
 	this.query.subscribe(this.search);
