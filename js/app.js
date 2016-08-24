@@ -12,7 +12,7 @@ var googleMapError = function() {
 // Initiazlie map and set up ViewModel
 var initMap = function(){
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 37.759, lng: -122.423},
+		center: {lat: 37.759, lng: -122.415},
 		zoom: 15
 	});
 	geocoder = new google.maps.Geocoder();
@@ -85,7 +85,7 @@ var initialLocations = [
 		lat: 37.752654,
 		lng: -122.41819150000003,
 		rating: 5,
-		review: ''
+		review: 'Maybe the most famous taqueria in the Mission - and for good reason. Everything at this place is amazing with generous slices of avocado accompanying many dishes. The salsas are all amazing as well. El Farolito is conveniently located next to the 24th St BART, so this is a great place to hit up on your way in or out of the city.'
 	},
 	{
 		name: 'Taqueria El Toro',
@@ -100,8 +100,8 @@ var initialLocations = [
 		address: '2889 Mission St, San Francisco, CA 94110',
 		lat: 37.7508961,
 		lng: -122.4180867,
-		rating: 5,
-		review: ''
+		rating: 0,
+		review: 'No review yet.'
 	},
 	{
 		name: "Mateo's Taqueria",
@@ -109,7 +109,7 @@ var initialLocations = [
 		lat: 37.7575517,
 		lng: -122.41872999999998,
 		rating: 4,
-		review: ''
+		review: 'A bit of an "alternative" taqueria, Mateo&apos;s offers up the standard fare with a bit of twist. Their specialty burritos are great for a change of pace (the Dulce Diabla is wonderfully spicy).'
 	},
 	{
 		name: 'Taqueria Vallarta',
@@ -117,7 +117,7 @@ var initialLocations = [
 		lat: 37.7524177,
 		lng: -122.41258700000003,
 		rating: 0,
-		review: ''
+		review: 'No review yet.'
 	},
 	{
 		name: 'Taqueria San Jose',
@@ -125,7 +125,7 @@ var initialLocations = [
 		lat: 37.7517432,
 		lng: -122.4186623,
 		rating: 0,
-		review: ''
+		review: 'No review yet.'
 	},
 	{
 		name: 'Taqueria San Francisco',
@@ -133,7 +133,7 @@ var initialLocations = [
 		lat: 37.7530544,
 		lng: -122.40810469999997,
 		rating: 0,
-		review: ''
+		review: 'No review yet.'
 	},
 	{
 		name: 'Taqueria El Castillito',
@@ -141,12 +141,15 @@ var initialLocations = [
 		lat: 37.7636445,
 		lng: -122.419872,
 		rating: 0,
-		review: ''
+		review: 'No review yet.'
 	},
 ];
+initialLocations.sort(function(a, b) {
+	return a.name < b.name;
+});
 
 // Knockout model for locations
-// Also makes markers and InfoWindows
+// Also makes markers and function for displaying infoWindow content
 var Location = function(data) {
 	var self = this;
 	this.name = data.name;
@@ -166,10 +169,15 @@ var Location = function(data) {
 	});
 	// Display rating and review in info window
 	this.showInfo = function() {
-		var content = '<div class="rating">';
+		var content = '<h1 class="taqueria-name">' + this.name + '</h1>'
+		content += '<h2 class="taqueria-address">' + this.address + '</h2>'
+		content += '<div class="rating">';
 		for (var i = 0; i < this.rating; i++) {
 			content += '<img class="star" src="images/star.ico">'
 		};
+		for (i = 0; i < 5 - this.rating; i++) {
+			content += '<img class="star" src="images/empty-star.png">'
+		}
 		content += '</div><div class="review">' + this.review + '</div>'
 		infoWindow.setContent(content);
 		self.marker.setAnimation(google.maps.Animation.BOUNCE);

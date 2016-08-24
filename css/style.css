@@ -15,6 +15,15 @@ input[type=search] {
 	text-indent: 10px;
 }
 
+.taqueria-name {
+	font-size: 20px;
+	margin-bottom: -15px;
+}
+
+.taqueria-address {
+	font-size: 15px;
+}
+
 .star {
 	width: 25px;
 }
