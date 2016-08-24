@@ -46,29 +46,53 @@ var NYTimes = function(location) {
 // Locations on the map
 var initialLocations = [
 	{
-		name: 'Dolores Park',
+		name: 'Taqueria Los Coyotes',
 		lat: 37.7597727,
-		lng: -122.427063
+		lng: -122.427063,
+		rating: 4,
+		review: 'This one has a special place in my heart for being the only taqueria in SF to have the California burrito - a San Diegan masterpiece of carne asada, pico de gallo, avocado, sour cream, and french fries. It’s not quite as good as the ones you’ll get down South, but it comes close. Unfortunately, it’s other San Diegan delicacy - carne asada fries - leaves much to be desired.'
 	},
 	{
-		name: 'Tartine Bakery',
+		name: 'Taqueria Cancun',
 		lat: 37.7614184,
-		lng: -122.4241038
+		lng: -122.4241038,
+		rating: 4,
+		review: 'A standard of the central Mission, Cancun can be hit or miss depending on the time of day and how many drunk people have invaded the space. The classic Mission-style burritos are excellent - and the size of a small child - but the quality can really drop late in the day. They’re open late, which is great when your 1:30 drunk munchies kick in but be warned: this place is cash only.'
 	},
 	{
-		name: 'Alamo Drafthouse Cinema',
+		name: 'Taqueria El Buen Sabor',
 		lat: 37.7562163,
-		lng: -122.4191911
+		lng: -122.4191911,
+		rating: 3,
+		review: 'As the main taqueria along the bougiest blocks of Valencia, El Buen Sabor sacrifices the guttural style of most other taquerias in favor of a decidedly less greasy smattering of options. The burritos are smaller (but just as pricey) as elsewhere and overall the food just isn’t as good as other nearby spots. But they do have a nice, lighter quesadilla and their breakfast burrito is excellent.'
 	},
 	{
-		name: 'Gracias Madre',
+		name: 'Pancho Villa Taqueria',
 		lat: 37.7615715,
-		lng: -122.4190799
+		lng: -122.4190799,
+		rating: 5,
+		review: 'Pancho Villa has managed to take everything that is great about the Mission burrito and expand on it. Their ingredients are incredibly fresh and meat wonderfully flavorful, but what really makes this the best spot in town is their unique technique of mixing your choice of salsa into your burrito. This is a beauty for spice-loving Mission residents who are tired of the district’s overall not-spicy-enough food.'
 	},
 	{
-		name: 'The Chapel',
+		name: 'Taqueria El Farolito',
 		lat: 37.760565,
-		lng: -122.421188
+		lng: -122.421188,
+		rating: 5,
+		review: ''
+	},
+	{
+		name: 'Taqueria El Toro',
+		lat: 0,
+		lng: 0,
+		rating: 3,
+		review: 'Don’t go to El Toro expecting the best burrito, but do go and get a plate of their excellent enchiladas. This is an excellent place to hit up when you get tired of the usual burrito fare (blasphemy, I know). '
+	},
+	{
+		name: 'La Taqueria',
+		lat: 0,
+		lng: 0,
+		rating: 5,
+		review: ''
 	}
 ];
 
