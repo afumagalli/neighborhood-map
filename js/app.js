@@ -13,7 +13,7 @@ var googleMapError = function() {
 var initMap = function(){
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.759, lng: -122.423},
-		zoom: 16
+		zoom: 15
 	});
 	geocoder = new google.maps.Geocoder();
 	// Use only one InfoWindow to keep max of one open at a time
@@ -50,45 +50,99 @@ var initialLocations = [
 	{
 		name: 'Taqueria Los Coyotes',
 		address: '3036 16th St, San Francisco, CA 94103',
+		lat: 37.7652495,
+		lng: -122.42045139999999,
 		rating: 4,
 		review: 'This one has a special place in my heart for being the only taqueria in SF to have the California burrito - a San Diegan masterpiece of carne asada, pico de gallo, avocado, sour cream, and french fries. It’s not quite as good as the ones you’ll get down South, but it comes close. Unfortunately, it’s other San Diegan delicacy - carne asada fries - leaves much to be desired.'
 	},
 	{
 		name: 'Taqueria Cancun',
 		address: '2288 Mission St, San Francisco, CA 94110',
+		lat: 37.7604955,
+		lng: -122.41957130000003,
 		rating: 4,
 		review: 'A standard of the central Mission, Cancun can be hit or miss depending on the time of day and how many drunk people have invaded the space. The classic Mission-style burritos are excellent - and the size of a small child - but the quality can really drop late in the day. They’re open late, which is great when your 1:30 drunk munchies kick in but be warned: this place is cash only.'
 	},
 	{
 		name: 'Taqueria El Buen Sabor',
 		address: '699 Valencia St, San Francisco, CA 94110',
+		lat: 37.76183899999999,
+		lng: -122.42148209999999,
 		rating: 3,
 		review: 'As the main taqueria along the bougiest blocks of Valencia, El Buen Sabor sacrifices the guttural style of most other taquerias in favor of a decidedly less greasy smattering of options. The burritos are smaller (but just as pricey) as elsewhere and overall the food just isn’t as good as other nearby spots. But they do have a nice, lighter quesadilla and their breakfast burrito is excellent.'
 	},
 	{
 		name: 'Pancho Villa Taqueria',
 		address: '3071 16th St, San Francisco, CA 94103',
+		lat: 37.7647281,
+		lng: -122.4210688,
 		rating: 5,
 		review: 'Pancho Villa has managed to take everything that is great about the Mission burrito and expand on it. Their ingredients are incredibly fresh and meat wonderfully flavorful, but what really makes this the best spot in town is their unique technique of mixing your choice of salsa into your burrito. This is a beauty for spice-loving Mission residents who are tired of the district’s overall not-spicy-enough food.'
 	},
 	{
 		name: 'Taqueria El Farolito',
 		address: '2779 Mission St, San Francisco, CA 94110',
+		lat: 37.752654,
+		lng: -122.41819150000003,
 		rating: 5,
 		review: ''
 	},
 	{
 		name: 'Taqueria El Toro',
 		address: '598 Valencia St, San Francisco, CA 94110',
+		lat: 37.7634212,
+		lng: -122.42201269999998,
 		rating: 3,
 		review: 'Don’t go to El Toro expecting the best burrito, but do go and get a plate of their excellent enchiladas. This is an excellent place to hit up when you get tired of the usual burrito fare (blasphemy, I know). '
 	},
 	{
 		name: 'La Taqueria',
 		address: '2889 Mission St, San Francisco, CA 94110',
+		lat: 37.7508961,
+		lng: -122.4180867,
 		rating: 5,
 		review: ''
-	}
+	},
+	{
+		name: "Mateo's Taqueria",
+		address: '2471 Mission St, San Francisco, CA 94110',
+		lat: 37.7575517,
+		lng: -122.41872999999998,
+		rating: 4,
+		review: ''
+	},
+	{
+		name: 'Taqueria Vallarta',
+		address: '3033 24th St, San Francisco, CA 94110',
+		lat: 37.7524177,
+		lng: -122.41258700000003,
+		rating: 0,
+		review: ''
+	},
+	{
+		name: 'Taqueria San Jose',
+		address: '2830 Mission St, San Francisco, CA 94110',
+		lat: 37.7517432,
+		lng: -122.4186623,
+		rating: 0,
+		review: ''
+	},
+	{
+		name: 'Taqueria San Francisco',
+		address: '2794 24th St, San Francisco, CA 94110',
+		lat: 37.7530544,
+		lng: -122.40810469999997,
+		rating: 0,
+		review: ''
+	},
+	{
+		name: 'Taqueria El Castillito',
+		address: '2092 Mission St, San Francisco, CA 94110',
+		lat: 37.7636445,
+		lng: -122.419872,
+		rating: 0,
+		review: ''
+	},
 ];
 
 // Knockout model for locations
@@ -97,23 +151,19 @@ var Location = function(data) {
 	var self = this;
 	this.name = data.name;
 	this.address = data.address;
+	this.lat = data.lat;
+	this.lng = data.lng;
 	this.rating = data.rating;
 	this.review = data.review;
 	this.visible = ko.observable(true);
-	geocoder.geocode({'address': this.address}, function(results, status) {
-		if (status == 'OK') {
-			self.marker = new google.maps.Marker({
-				title: self.name,
-				position: results[0].geometry.location,
-				map: map
-			});
-			self.marker.addListener('click', function() {
-				self.showInfo();
-			});
-		} else {
-			alert('Geocode was no successful for the following reason: ' + status);
-		}
-	})
+	this.marker = new google.maps.Marker({
+		title: this.name,
+		position: {lat: this.lat, lng: this.lng},
+		map: map
+	});
+	self.marker.addListener('click', function() {
+		self.showInfo();
+	});
 	// Display rating and review in info window
 	this.showInfo = function() {
 		var content = '<div class="rating">';
