@@ -14,6 +14,7 @@ input[type=search] {
 	color: black;
 	text-indent: 10px;
 	width: 100%;
+	padding: 5px;
 }
 
 .main-header {
