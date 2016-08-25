@@ -10,9 +10,15 @@ form {
 }
 
 input[type=search] {
-	border-radius: 25px;
+	border-radius: 10px;
 	color: black;
 	text-indent: 10px;
+}
+
+.main-header {
+	text-align: center;
+	color: #ce1126;
+	margin-bottom: 30px;
 }
 
 .taqueria-name {
@@ -37,12 +43,18 @@ input[type=search] {
 }
 
 #location-list {
-	width: 25%;
+	max-width: 33%;
 	height: 100%;
-	background-color: black;
-	padding: 10px;
-	color: white;
+	background-color: #006847;
+	padding: 10px 30px 10px 10px;
+	color: #ffffff;
+	font-size: 20px;
 	float: left;
+}
+
+ul {
+	list-style: none;
+	text-indent: -20px;
 }
 
 #map {
