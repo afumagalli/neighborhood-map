@@ -13,6 +13,7 @@ input[type=search] {
 	border-radius: 10px;
 	color: black;
 	text-indent: 10px;
+	width: 100%;
 }
 
 .main-header {
@@ -42,19 +43,33 @@ input[type=search] {
 	max-width: 300px;
 }
 
-#location-list {
+.drawer {
 	max-width: 33%;
 	height: 100%;
 	background-color: #006847;
-	padding: 10px 30px 10px 10px;
 	color: #ffffff;
-	font-size: 20px;
+	font-size: 16px;
 	float: left;
 }
 
-ul {
+.location-list {
+	padding: 10px;
 	list-style: none;
-	text-indent: -20px;
+	text-align: center;
+}
+
+button {
+	background-color: #8f4620;
+	border: 1px solid white;
+	padding: 10px;
+	-webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    width: 80%;
+}
+
+button:hover {
+    background-color: #ffffff;
+    color: black;
 }
 
 #map {
