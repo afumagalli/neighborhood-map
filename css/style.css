@@ -17,6 +17,10 @@ input[type=search] {
 	padding: 5px;
 }
 
+.hamburger {
+	display: none;
+}
+
 .main-header {
 	text-align: center;
 	color: #ce1126;
@@ -46,11 +50,12 @@ input[type=search] {
 
 .drawer {
 	max-width: 33%;
-	height: 100%;
+	max-height: 100%;
 	background-color: #006847;
 	color: #ffffff;
 	font-size: 16px;
 	float: left;
+	overflow: scroll;
 }
 
 .location-list {
@@ -59,7 +64,7 @@ input[type=search] {
 	text-align: center;
 }
 
-button {
+.location-item {
 	background-color: #8f4620;
 	border: 1px solid white;
 	padding: 10px;
@@ -68,7 +73,7 @@ button {
     width: 80%;
 }
 
-button:hover {
+.location-item:hover {
     background-color: #ffffff;
     color: black;
 }
@@ -77,28 +82,24 @@ button:hover {
 	height: 100%;
 }
 
-#hamburger-menu {
-  display: none;
-}
-
 @media screen and (max-width: 549px) {
-	#hamburger-menu {
-		height: 48px;
-		margin-right: 0.5em;
-		z-index: 1;
+	.hamburger {
 		display: inline-block;
-		position: absolute;
-		right: 0;
-		padding: 0.5em;
-		background: #000;
+		position: relative;
+		float: left;
+		width: 40px;
+		height: 40px;
+		margin: 10px 15px 15px 25px;
+		background-color: transparent;
+		border: solid black;
 	}
-	#hamburger-menu svg {
-		width: 32px;
-		fill: #fff;
+	.main-header {
+		font-size: 18px;
+		margin-bottom: 15px;
 	}
 	.drawer {
 		z-index: 2;
-		width: 50%;
+		max-width: 100%;
 		position: absolute;
 		-webkit-transform: translate(-300px, 0);
 		transform: translate(-300px, 0);
@@ -107,8 +108,5 @@ button:hover {
 	.drawer.open {
 		-webkit-transform: translate(0, 0);
 		transform: translate(0, 0);
-	}
-	#location-list {
-		width: 50%;
 	}
 }
