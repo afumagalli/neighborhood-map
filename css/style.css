@@ -5,6 +5,45 @@ body {
 	padding: 0;
 }
 
+.wrapper {
+	display: flex;
+	min-height: 100%;
+	flex-direction: column;
+}
+
+.hamburger {
+	display: none;
+}
+
+.header {
+	height: 80px;
+}
+
+.main-header {
+	color: #ce1126;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+
+.content {
+	flex: 1;
+	position: relative;
+}
+
+.drawer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 250px;
+	background-color: #006847;
+	color: #ffffff;
+	font-size: 16px;
+	overflow: scroll;
+}
+
 form {
 	margin: 10px;
 }
@@ -15,51 +54,6 @@ input[type=search] {
 	text-indent: 10px;
 	width: 100%;
 	padding: 5px;
-}
-
-.hamburger {
-	display: none;
-}
-
-.row.header {
-	height: 13%;
-}
-
-.main-header {
-	text-align: center;
-	color: #ce1126;
-	margin-bottom: 30px;
-}
-
-.taqueria-name {
-	font-size: 20px;
-	margin-bottom: -15px;
-}
-
-.taqueria-address {
-	font-size: 15px;
-}
-
-.star {
-	width: 25px;
-}
-
-.rating {
-	margin: 10px 0 10px 0;
-}
-
-.review {
-	max-width: 300px;
-}
-
-.drawer {
-	max-width: 33%;
-	height: 87%;
-	background-color: #006847;
-	color: #ffffff;
-	font-size: 16px;
-	float: left;
-	overflow: scroll;
 }
 
 .location-list {
@@ -83,10 +77,58 @@ input[type=search] {
 }
 
 #map {
-	height: 87%;
+	/*TODO: Try height: calc(100%-400px)*/
+	position: absolute;
+	left: 250px;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 
-@media screen and (max-width: 549px) {
+.taqueria-name {
+	font-size: 20px;
+	margin-bottom: -15px;
+}
+
+.taqueria-address {
+	font-size: 15px;
+}
+
+.star {
+	width: 25px;
+}
+
+.rating {
+	margin: 10px 0 10px 0;
+}
+
+.review {
+	max-width: 300px;
+}
+
+@media screen and (max-height: 430px) {
+	.row.header {
+		display: none;
+	}
+	.drawer {
+		font-size: 14px;
+		height: 100%;
+	}
+	#map {
+		height: 100%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.main-header {
+		font-size: 28px;
+	}
+	.drawer {
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 420px) {
 	.hamburger {
 		display: inline-block;
 		position: relative;
@@ -97,13 +139,16 @@ input[type=search] {
 		background-color: transparent;
 		border: solid black;
 	}
+	.header {
+		height: 70px;
+	}
 	.main-header {
 		font-size: 18px;
-		margin-bottom: 15px;
 	}
 	.drawer {
 		z-index: 2;
 		max-width: 100%;
+		height: 100%;
 		position: absolute;
 		-webkit-transform: translate(-300px, 0);
 		transform: translate(-300px, 0);
@@ -112,5 +157,14 @@ input[type=search] {
 	.drawer.open {
 		-webkit-transform: translate(0, 0);
 		transform: translate(0, 0);
+	}
+	#map {
+		left: 0;
+	}
+}
+
+@media screen and (max-width: 374px) {
+	.main-header {
+		font-size: 14px;
 	}
 }
